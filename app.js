@@ -1,7 +1,18 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const session = require('express-session');
+
 var app = express();
+
+
+//use session
+app.use(session({
+  secret:'treehouse loves you',
+  resave:true,
+  saveUninitialized: false,
+}));
+
 //connect mongodb
 mongoose.connect("mongodb://localhost:27017/bookworm", { useNewUrlParser: true });
 const db= mongoose.connection;

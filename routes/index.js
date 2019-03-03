@@ -59,5 +59,29 @@ router.post('/register', (req,res,next)=>{
     }
 });
 
+// GET /login
+router.get('/login', (req,res,next)=>{
+  res.render('login', {title: 'Login'})
+});
+
+//POST /login
+router.post('/login', (req,res,next)=>{
+  if(req.body.email && req.body.password){
+    User.auth(req.body.email,req.body.password, function(error,user){
+      if (error||!user){
+        const err = new Error('Wrong email or password.');
+        err.status = 401;
+        return next(err);
+      }else{
+        req.session.userID=user._id;
+        return res.redirect('/profile');
+      }
+    });
+  }else{
+    const err = new Error('Email and password are required!');
+    err.status=400;
+    return next(err);
+  }
+});   
 
 module.exports = router;
