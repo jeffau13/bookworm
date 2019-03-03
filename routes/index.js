@@ -102,4 +102,19 @@ router.get('/profile', (req,res,next)=>{
     });
 });
 
+//GET /logout
+
+router.get('/logout', (req, res, next) => {
+  if(req.session){
+    req.session.destroy(err=>{
+      if(err){
+        return next(err);
+      }else{
+        return res.redirect('/');
+      }
+    });
+  }
+
+})
+
 module.exports = router;
