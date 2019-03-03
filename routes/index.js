@@ -18,7 +18,14 @@ router.get('/contact', function(req, res, next) {
 
 // GET /register
 router.get('/register', (req,res,next)=>{
-  res.send('Register today!');
-  // res.render('register', {title: 'Register'});
+
+  res.render('register', {title: 'Register'});
 });
+
+// POST /register
+router.post('/register', (req,res,next)=>{
+  res.send('User created!');
+});
+
+
 module.exports = router;
