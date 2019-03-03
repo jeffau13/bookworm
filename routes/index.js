@@ -48,6 +48,7 @@ router.post('/register', (req,res,next)=>{
       if(error){
         return next(error);
       }else{
+        req.session.userId = user._id;
         return res.redirect('/profile');
       }
     });
@@ -67,13 +68,13 @@ router.get('/login', (req,res,next)=>{
 //POST /login
 router.post('/login', (req,res,next)=>{
   if(req.body.email && req.body.password){
-    User.auth(req.body.email,req.body.password, function(error,user){
+    User.authenticate(req.body.email,req.body.password, function(error,user){
       if (error||!user){
         const err = new Error('Wrong email or password.');
         err.status = 401;
         return next(err);
       }else{
-        req.session.userID=user._id;
+        req.session.userId = user._id;
         return res.redirect('/profile');
       }
     });

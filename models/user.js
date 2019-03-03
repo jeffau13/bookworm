@@ -37,7 +37,7 @@ UserSchema.pre('save', function(next){
 });
 
 //adding method for authentication:
-UserSchema.static.auth = function (email, password, callback) {
+UserSchema.statics.authenticate = function (email, password, callback) {
   User.findOne({ email: email })
     .exec(function (error, user) {
       if (error) {
@@ -58,6 +58,9 @@ UserSchema.static.auth = function (email, password, callback) {
       });
     });
 }
+
+
+
 
 const User = mongoose.model('User',UserSchema);
 module.exports = User;
