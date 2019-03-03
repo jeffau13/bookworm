@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const User = require('../models/user');
 
 // GET /
 router.get('/', function(req, res, next) {
@@ -24,7 +25,38 @@ router.get('/register', (req,res,next)=>{
 
 // POST /register
 router.post('/register', (req,res,next)=>{
-  res.send('User created!');
+  //Error checking
+  if(req.body.email && req.body.name && req.body.favoriteBook &&
+    req.body.password && req.body.confirmPassword){
+      //confirm that passwords are identical:
+
+      if(req.body.password !== req.body.confirmPassword){
+        const err = new Error('Passwords do not match.');
+        err.status = 400;
+        return next(err);
+      }
+    //create user object to hold data to be inserted:
+      const userData={
+        email: req.body.email,
+        name: req.body.name,
+        favoriteBook: req.body.favoriteBook,
+        password: req.body.password
+
+      };
+    // insert data into mongo:
+    User.create(userData,(error,user)=>{
+      if(error){
+        return next(error);
+      }else{
+        return res.redirect('/profile');
+      }
+    });
+
+    }else{
+      const err = new Error('All fields are required.');
+      err.status = 400;
+      return next(err);
+    }
 });
 
 
