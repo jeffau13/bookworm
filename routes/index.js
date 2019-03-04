@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 });
 
 // GET /about
-router.get('/about', function(req, res, next) {
+router.get('/about',  function(req, res, next) {
   return res.render('about', { title: 'About' });
 });
 
@@ -87,12 +87,7 @@ router.post('/login', (req,res,next)=>{
 });   
 
 // GET /profile
-router.get('/profile', (req,res,next)=>{
-  if(! req.session.userId){
-    const err = new Error('You are not authorized to view this page');
-    err.status = 403;
-    return next(err);
-  }
+router.get('/profile', mid.requiresLogin, (req,res,next)=>{
   User.findById(req.session.userId)
     .exec((error,user)=>{
       if (error){
